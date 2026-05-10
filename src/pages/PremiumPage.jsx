@@ -4,6 +4,7 @@ import PremiumHero from '@/components/premium/PremiumHero';
 import PremiumRaypath from '@/components/premium/PremiumRaypath';
 import PremiumHizero from '@/components/premium/PremiumHizero';
 import PremiumProductSets from '@/components/premium/PremiumProductSets';
+import PremiumResults from '@/components/premium/PremiumResults';
 import PremiumWhyUs from '@/components/premium/PremiumWhyUs';
 import PremiumContact from '@/components/premium/PremiumContact';
 import PremiumFooter from '@/components/premium/PremiumFooter';
@@ -36,6 +37,7 @@ const PremiumPage = () => {
         <PremiumRaypath />
         <PremiumHizero />
         <PremiumProductSets onRentClick={handleRentClick} />
+        <PremiumResults />
         <PremiumWhyUs />
         <PremiumContact />
       </main>

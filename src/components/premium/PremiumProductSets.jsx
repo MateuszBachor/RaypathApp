@@ -8,7 +8,7 @@ const sets = [
     id: 'house',
     title: 'Zestaw Domowy (House)',
     description: 'Kompletne rozwiązanie do całego domu: od kuchni po okna.',
-    image: 'https://placehold.co/400x400/2d4a3e/ffffff?text=Zestaw+House',
+    image: 'https://raypath-shop.com/cdn/shop/files/box-with-content-normal.png?v=1745599936&width=823',
     features: ['Pełny system do okien', 'Rękawice Nano Silver', 'Sunbeam Care'],
     price: 'Bestseller'
   },
@@ -16,7 +16,7 @@ const sets = [
     id: 'floor',
     title: 'Zestaw Podłogowy',
     description: 'Profesjonalne czyszczenie każdej powierzchni podłogowej.',
-    image: 'https://placehold.co/400x400/2d4a3e/ffffff?text=Zestaw+Floor',
+    image: 'https://raypath-shop.com/cdn/shop/files/content-swift-short-no-swivel.png?v=1709591061&width=823',
     features: ['Drążek teleskopowy', 'Poduszka White', 'Poduszka Pink'],
     price: 'Popularny'
   },

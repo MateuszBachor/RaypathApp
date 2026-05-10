@@ -7,7 +7,7 @@ const PremiumHizero = () => {
         <div className="grid md:grid-cols-2 gap-16 items-center">
           <div>
             <img 
-              src="https://images.unsplash.com/photo-1563315411-c9167c13038b?auto=format&fit=crop&q=80&w=1000" 
+              src="https://hizero.pl/wp-content/uploads/2022/11/mbz-5.jpeg" 
               alt="Hizero bioniczny mop" 
               className="rounded-2xl shadow-2xl shadow-slate-200"
             />
