@@ -6,10 +6,51 @@ import { Card, CardContent } from '@/components/ui/card';
 
 const PremiumContact = () => {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    city: '',
+    message: ''
+  });
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+
+    try {
+      const apiUrl = import.meta.env.VITE_SUBMIT_FORM_URL;
+      if (!apiUrl) {
+  console.error("Błąd: Adres API nie jest zdefiniowany!");
+  alert("Błąd konfiguracji po stronie serwera.");
+  setLoading(false);
+  return;
+}
+      await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          source: 'Strona Premium - Kontakt',
+          timestamp: new Date().toISOString()
+        }),
+      });
+
+      setSubmitted(true);
+      setFormData({ name: '', phone: '', city: '', message: '' });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('Wystąpił błąd podczas wysyłania formularza. Spróbuj ponownie później.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -27,23 +68,56 @@ const PremiumContact = () => {
             <form onSubmit={handleSubmit} className="grid md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">Imię i Nazwisko</label>
-                <Input placeholder="Twoje imię..." className="h-14 rounded-2xl border-slate-200 focus:ring-brand-gold bg-white" required />
+                <Input 
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="Twoje imię..." 
+                  className="h-14 rounded-2xl border-slate-200 focus:ring-brand-gold bg-white" 
+                  required 
+                />
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">Telefon</label>
-                <Input type="tel" placeholder="+48 ..." className="h-14 rounded-2xl border-slate-200 focus:ring-brand-gold bg-white" required />
+                <Input 
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  type="tel" 
+                  placeholder="+48 ..." 
+                  className="h-14 rounded-2xl border-slate-200 focus:ring-brand-gold bg-white" 
+                  required 
+                />
               </div>
               <div className="md:col-span-2 space-y-2">
                 <label className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">Miejscowość</label>
-                <Input placeholder="Gdzie mieszkasz?" className="h-14 rounded-2xl border-slate-200 focus:ring-brand-gold bg-white" required />
+                <Input 
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  placeholder="Gdzie mieszkasz?" 
+                  className="h-14 rounded-2xl border-slate-200 focus:ring-brand-gold bg-white" 
+                  required 
+                />
               </div>
               <div className="md:col-span-2 space-y-2">
                 <label className="text-xs font-bold uppercase tracking-widest text-slate-500 ml-1">Twoja wiadomość</label>
-                <Textarea rows={4} placeholder="Opisz swoje potrzeby..." className="rounded-2xl border-slate-200 focus:ring-brand-gold bg-white min-h-[120px]" />
+                <Textarea 
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  rows={4} 
+                  placeholder="Opisz swoje potrzeby..." 
+                  className="rounded-2xl border-slate-200 focus:ring-brand-gold bg-white min-h-[120px]" 
+                />
               </div>
               <div className="md:col-span-2 pt-4">
-                <Button type="submit" className="w-full bg-brand-green hover:bg-slate-900 text-white py-8 rounded-2xl font-bold uppercase tracking-[0.2em] transition-all shadow-xl shadow-brand-green/20">
-                  Wyślij zgłoszenie
+                <Button 
+                  type="submit" 
+                  disabled={loading}
+                  className="w-full bg-brand-green hover:bg-slate-900 text-white py-8 rounded-2xl font-bold uppercase tracking-[0.2em] transition-all shadow-xl shadow-brand-green/20"
+                >
+                  {loading ? 'Wysyłanie...' : 'Wyślij zgłoszenie'}
                 </Button>
               </div>
             </form>
@@ -60,3 +134,4 @@ const PremiumContact = () => {
 };
 
 export default PremiumContact;
+

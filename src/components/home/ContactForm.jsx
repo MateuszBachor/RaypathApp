@@ -6,10 +6,48 @@ import { Card, CardContent } from '@/components/ui/card';
 
 const ContactForm = () => {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    message: ''
+  });
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    
+    try {
+      const apiUrl = import.meta.env.VITE_SUBMIT_FORM_URL;
+      if (!apiUrl) {
+        console.warn('VITE_SUBMIT_FORM_URL is not defined');
+      }
+
+      await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          source: 'Strona Główna - Kontakt',
+          timestamp: new Date().toISOString()
+        }),
+      });
+      
+      setSubmitted(true);
+      setFormData({ name: '', phone: '', message: '' });
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('Wystąpił błąd podczas wysyłania formularza. Spróbuj ponownie później.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -43,6 +81,9 @@ const ContactForm = () => {
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium text-slate-700">Imię i Nazwisko</label>
                     <Input 
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
                       placeholder="Twoje imię..." 
                       className="py-6 rounded-xl border-slate-200"
                       required 
@@ -51,6 +92,9 @@ const ContactForm = () => {
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium text-slate-700">Numer Telefonu</label>
                     <Input 
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
                       type="tel" 
                       placeholder="Twój numer..." 
                       className="py-6 rounded-xl border-slate-200"
@@ -60,16 +104,23 @@ const ContactForm = () => {
                   <div className="space-y-1.5">
                     <label className="text-sm font-medium text-slate-700">Wiadomość / Interesujący zestaw</label>
                     <Textarea 
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
                       rows={3} 
                       placeholder="W czym mogę pomóc?" 
                       className="rounded-xl border-slate-200 min-h-[100px]"
                     />
                   </div>
-                  <Button type="submit" className="w-full py-7 text-lg font-bold rounded-xl shadow-md">
-                    Wyślij zgłoszenie
+                  <Button 
+                    type="submit" 
+                    disabled={loading}
+                    className="w-full py-7 text-lg font-bold rounded-xl shadow-md"
+                  >
+                    {loading ? 'Wysyłanie...' : 'Wyślij zgłoszenie'}
                   </Button>
                   {submitted && (
-                    <div className="text-center p-3 bg-green-50 text-green-700 rounded-lg text-sm font-medium border border-green-100">
+                    <div className="text-center p-3 bg-green-50 text-green-700 rounded-lg text-sm font-medium border border-green-100 animate-in fade-in zoom-in">
                       Dziękuję! Skontaktuję się wkrótce.
                     </div>
                   )}
@@ -84,3 +135,4 @@ const ContactForm = () => {
 };
 
 export default ContactForm;
+

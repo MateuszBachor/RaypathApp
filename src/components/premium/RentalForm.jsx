@@ -5,10 +5,50 @@ import { Card, CardContent } from '@/components/ui/card';
 
 const RentalForm = ({ selectedSet, onBack }) => {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    phone: '',
+    address: '',
+    date: ''
+  });
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+
+    try {
+      const apiUrl = import.meta.env.VITE_SUBMIT_FORM_URL;
+      
+      await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          selectedSet: selectedSet ? {
+            title: selectedSet.title,
+            id: selectedSet.id
+          } : null,
+          source: 'Wypożyczalnia - Formularz',
+          timestamp: new Date().toISOString()
+        }),
+      });
+
+      setSubmitted(true);
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert('Wystąpił błąd podczas wysyłania formularza. Spróbuj ponownie później.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -45,27 +85,66 @@ const RentalForm = ({ selectedSet, onBack }) => {
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-widest text-slate-500">Imię</label>
-                      <Input placeholder="Jan" className="h-12 rounded-xl" required />
+                      <Input 
+                        name="firstName"
+                        value={formData.firstName}
+                        onChange={handleChange}
+                        placeholder="Jan" 
+                        className="h-12 rounded-xl" 
+                        required 
+                      />
                     </div>
                     <div className="space-y-2">
                       <label className="text-xs font-bold uppercase tracking-widest text-slate-500">Nazwisko</label>
-                      <Input placeholder="Kowalski" className="h-12 rounded-xl" required />
+                      <Input 
+                        name="lastName"
+                        value={formData.lastName}
+                        onChange={handleChange}
+                        placeholder="Kowalski" 
+                        className="h-12 rounded-xl" 
+                        required 
+                      />
                     </div>
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-bold uppercase tracking-widest text-slate-500">Telefon kontaktowy</label>
-                    <Input type="tel" placeholder="+48 ..." className="h-12 rounded-xl" required />
+                    <Input 
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      type="tel" 
+                      placeholder="+48 ..." 
+                      className="h-12 rounded-xl" 
+                      required 
+                    />
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-bold uppercase tracking-widest text-slate-500">Adres dostawy</label>
-                    <Input placeholder="Ulica, numer, miasto" className="h-12 rounded-xl" required />
+                    <Input 
+                      name="address"
+                      value={formData.address}
+                      onChange={handleChange}
+                      placeholder="Ulica, numer, miasto" 
+                      className="h-12 rounded-xl" 
+                      required 
+                    />
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-bold uppercase tracking-widest text-slate-500">Preferowana data (opcjonalnie)</label>
-                    <Input type="date" className="h-12 rounded-xl" />
+                    <Input 
+                      name="date"
+                      value={formData.date}
+                      onChange={handleChange}
+                      type="date" 
+                      className="h-12 rounded-xl" 
+                    />
                   </div>
-                  <Button type="submit" className="w-full py-7 bg-brand-gold hover:bg-brand-gold-hover text-white font-bold rounded-xl uppercase tracking-widest text-sm shadow-xl shadow-brand-gold/20 mt-4">
-                    Wyślij zapytanie o wynajem
+                  <Button 
+                    type="submit" 
+                    disabled={loading}
+                    className="w-full py-7 bg-brand-gold hover:bg-brand-gold-hover text-white font-bold rounded-xl uppercase tracking-widest text-sm shadow-xl shadow-brand-gold/20 mt-4"
+                  >
+                    {loading ? 'Wysyłanie...' : 'Wyślij zapytanie o wynajem'}
                   </Button>
                 </form>
               ) : (
@@ -91,3 +170,4 @@ const RentalForm = ({ selectedSet, onBack }) => {
 };
 
 export default RentalForm;
+
