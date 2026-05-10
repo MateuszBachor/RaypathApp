@@ -24,7 +24,7 @@ const sets = [
     id: 'body',
     title: 'Face & Body Care',
     description: 'Pielęgnacja twarzy i ciała w zgodzie z Twoją naturą.',
-    image: 'https://placehold.co/400x400/2d4a3e/ffffff?text=Face+and+Body',
+    image: 'https://sklep.pt4camp.pl/environment/cache/images/productGfx_14584_0_0/4f848649dc33a02e228c2a574002fe2d.webp',
     features: ['Face Glove', 'Body Glove peeling', 'Nano-demakijaż'],
     price: 'Premium'
   },
