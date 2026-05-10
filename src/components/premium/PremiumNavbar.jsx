@@ -4,12 +4,12 @@ import { Button } from '@/components/ui/button';
 const PremiumNavbar = () => {
   return (
     <nav className="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-100">
-      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between container">
+      <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between ">
         <div className="flex flex-col">
           <span className="text-xs tracking-[0.3em] text-brand-gold font-bold uppercase">Ekopartner</span>
           <span className="text-lg font-serif font-bold text-brand-green leading-none italic">Niezależny Doradca</span>
         </div>
-        <div className="hidden md:flex space-x-10 font-bold text-[11px] uppercase tracking-[0.2em] text-slate-600 item-center">
+        <div className="hidden md:flex space-x-10 font-bold text-[11px] uppercase tracking-[0.2em] text-slate-600 items-center">
           <a href="#hero" className="hover:text-brand-gold transition-colors">Start</a>
           <a href="#raypath" className="hover:text-brand-gold transition-colors">Raypath</a>
           <a href="#hizero" className="hover:text-brand-gold transition-colors">Hizero</a>
